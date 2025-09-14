@@ -8,8 +8,11 @@ cur.execute(""" CREATE TABLE IF NOT EXISTS jobs_computrabajo (
     company TEXT,
     link TEXT UNIQUE
 )""")
-
-urljob = "https://co.computrabajo.com/trabajos-de-python-en-cali"
+job_title = input("what job are you looking for?")
+location_job = input("in which location?")
+process_title = job_title.lower().replace(' ', '-')
+process_location = location_job.lower().replace(' ', '-')
+urljob = f"https://co.computrabajo.com/trabajos-de-{process_title}-en-{process_location}"
 urlresponse = requests.get(urljob)
 soup = BeautifulSoup(urlresponse.text, "html.parser")
 job_list = soup.find_all("article", class_="box_offer")
@@ -30,6 +33,6 @@ for jobarticle in job_list:
             USER_INFORMATION = (job_data["title"], job_data["company"], job_data["link"])
             cur.execute(SQL_insert,USER_INFORMATION)
 con.commit()
-
-
+con.close()
+print("Done right now you can go to the file and you will find the results :D")
 
