@@ -26,6 +26,10 @@ for jobarticle in job_list:
             job_title = link_tag.text.strip()
             job_link = link_tag["href"]
             job_data = {"title" :job_title , "company":company_title_justtext , "link": job_link}
-"INSERT OR IGNORE INTO jobs_computrabajo (title, company, link) VALUES (?, ?, ?)"
-(job_data["title"], job_data["company"], job_data["link"])
-cur.execute()
+            SQL_insert = "INSERT OR IGNORE INTO jobs_computrabajo (title, company, link) VALUES (?, ?, ?)"
+            USER_INFORMATION = (job_data["title"], job_data["company"], job_data["link"])
+            cur.execute(SQL_insert,USER_INFORMATION)
+con.commit()
+
+
+
