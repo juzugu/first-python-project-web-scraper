@@ -16,6 +16,7 @@ urljob = f"https://co.computrabajo.com/trabajos-de-{process_title}-en-{process_l
 urlresponse = requests.get(urljob)
 soup = BeautifulSoup(urlresponse.text, "html.parser")
 job_list = soup.find_all("article", class_="box_offer")
+print(f"Found {len(job_list)} job listings.")
 jobscraped_data = []
 for jobarticle in job_list:
     jobfinderarticle = jobarticle.find("h2")
