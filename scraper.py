@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import sqlite3
 
-con = sqlite3.connect("jobsscrapingjuzugu.db")
+con = sqlite3.connect("booksjuzugu.db")
 cur = con.cursor()
 cur.execute(""" CREATE TABLE IF NOT EXISTS books_scraper (
     book_name TEXT,
