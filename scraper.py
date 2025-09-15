@@ -8,17 +8,14 @@ cur.execute(""" CREATE TABLE IF NOT EXISTS jobs_computrabajo (
     company TEXT,
     link TEXT UNIQUE
 )""")
-job_title = input("what job are you looking for?")
-location_job = input("in which location?")
-process_title = job_title.lower().replace(' ', '-')
-process_location = location_job.lower().replace(' ', '-')
-urljob = f"https://co.computrabajo.com/trabajos-de-{process_title}-en-{process_location}"
-urlresponse = requests.get(urljob)
+
+urlbook = "http://books.toscrape.com"
+urlresponse = requests.get(urlbook)
 soup = BeautifulSoup(urlresponse.text, "html.parser")
-job_list = soup.find_all("article", class_="box_offer")
-print(f"Found {len(job_list)} job listings.")
+book_list = soup.find_all("article", class_="product_pod")
+print(f"Found {len(book_list)} books.")
 jobscraped_data = []
-for jobarticle in job_list:
+for jobarticle in book_list:
     jobfinderarticle = jobarticle.find("h2")
     if jobfinderarticle:
         link_tag = jobfinderarticle.find("a")
