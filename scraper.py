@@ -1,36 +1,30 @@
 import requests
 from bs4 import BeautifulSoup
 import sqlite3
+
 con = sqlite3.connect("jobsscrapingjuzugu.db")
 cur = con.cursor()
-cur.execute(""" CREATE TABLE IF NOT EXISTS jobs_computrabajo (
-    title TEXT,
-    company TEXT,
-    link TEXT UNIQUE
+cur.execute(""" CREATE TABLE IF NOT EXISTS books_scraper (
+    book_name TEXT,
+    price TEXT 
 )""")
-
 urlbook = "http://books.toscrape.com"
 urlresponse = requests.get(urlbook)
 soup = BeautifulSoup(urlresponse.text, "html.parser")
 book_list = soup.find_all("article", class_="product_pod")
 print(f"Found {len(book_list)} books.")
-jobscraped_data = []
-for jobarticle in book_list:
-    jobfinderarticle = jobarticle.find("h2")
-    if jobfinderarticle:
-        link_tag = jobfinderarticle.find("a")
+for bookarticle in book_list:
+    bookfinderarticle = bookarticle.find("h3")
+    if bookfinderarticle:
+        link_tag = bookfinderarticle.find("a")
         if link_tag:
-            company_title = jobarticle.find("p")
-            company_title_justtext = "stillnothing"
-            if company_title:
-                company_title_justtext = company_title.text.strip()
-            job_title = link_tag.text.strip()
-            job_link = link_tag["href"]
-            job_data = {"title" :job_title , "company":company_title_justtext , "link": job_link}
-            SQL_insert = "INSERT OR IGNORE INTO jobs_computrabajo (title, company, link) VALUES (?, ?, ?)"
-            USER_INFORMATION = (job_data["title"], job_data["company"], job_data["link"])
-            cur.execute(SQL_insert,USER_INFORMATION)
+            book_name_text = link_tag["title"]
+            bookprice = bookarticle.find("p", class_="price_color")
+            book_price_text = bookprice.text.strip()
+            book_data = {"book_name": book_name_text, "price": book_price_text}
+            SQL_insert = "INSERT OR IGNORE INTO books_scraper (book_name, price) VALUES (?, ?)"
+            USER_INFORMATION = (book_data["book_name"], book_data["price"])
+            cur.execute(SQL_insert, USER_INFORMATION)
 con.commit()
 con.close()
 print("Done right now you can go to the file and you will find the results :D")
-
